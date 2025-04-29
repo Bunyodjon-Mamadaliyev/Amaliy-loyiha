@@ -26,5 +26,9 @@ class ImportedData(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.source_file.title} importi"
+        return f"{self.source_file.title} importi" if self.source_file else "No source file"
+
+
+
+
 

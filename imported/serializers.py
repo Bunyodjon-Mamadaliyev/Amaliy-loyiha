@@ -24,7 +24,12 @@ class ImportedDataSerializer(serializers.ModelSerializer):
     source_file = FileSimpleSerializer()
     imported_by = serializers.PrimaryKeyRelatedField(read_only=True)
     rows_count = serializers.IntegerField(read_only=True)
-    columns = serializers.ListField(child=serializers.CharField(), read_only=True)
+    columns = serializers.SerializerMethodField()
+
+    def get_columns(self, obj):
+        if isinstance(obj.columns, str):
+            return obj.columns.split(',')
+        return obj.columns
 
     class Meta:
         model = ImportedData
@@ -33,6 +38,7 @@ class ImportedDataSerializer(serializers.ModelSerializer):
             'columns', 'imported_by', 'created_at'
         ]
         read_only_fields = fields
+
 
 
 class ImportedDataCreateSerializer(serializers.ModelSerializer):
